@@ -1,6 +1,7 @@
 package template
 
 import (
+	"fmt"
 	"path/filepath"
 	"strings"
 
@@ -48,11 +49,13 @@ func commandsModify(appPath, binaryName string, version cosmosver.Version) genny
 		if version.LT(cosmosver.StargateFiftyVersion) {
 			return errors.New("rollkit requires Ignite v28+ / Cosmos SDK v0.50+")
 		}
-
+		DefaultRollkitServerVersion := "test-rollkit-main"
+		// DefaultRollkitConfigVersion := "v0.13.7"
 		content, err := xast.AppendImports(
 			f.String(),
-			xast.WithLastNamedImport("rollserv", "github.com/rollkit/cosmos-sdk-starter/server"),
+			xast.WithLastNamedImport("rollserv", fmt.Sprintf("github.com/rollkit/cosmos-sdk-starter/server@%s", DefaultRollkitServerVersion)),
 			xast.WithLastNamedImport("rollconf", "github.com/rollkit/rollkit/config"),
+			// xast.WithLastNamedImport("rollconf", fmt.Sprintf("github.com/rollkit/rollkit/config@%s", DefaultRollkitConfigVersion)),
 		)
 		if err != nil {
 			return err
